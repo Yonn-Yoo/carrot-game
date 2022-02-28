@@ -16,8 +16,6 @@ function addItem(className, count, imgPath) {
   const y1 = 0;
   const x2 = fieldRect.width - carrot_size;
   const y2 = fieldRect.height - carrot_size;
-  // 민경이 바보
-  // 미녕이 똥꼬
   for (let i = 0; i < count; i++) {
     const item = document.createElement("img");
     item.setAttribute("class", className);
