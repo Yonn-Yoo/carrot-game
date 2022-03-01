@@ -5,6 +5,9 @@ const carrot_count = 6;
 const bug_count = 6;
 const game_duration_sec = 10;
 
+const popUp = document.querySelector(".pop-up");
+const popUpText = document.querySelector(".pop-up__message");
+const popUpRefresh = document.querySelector(".pop-up__refresh");
 const field = document.querySelector(".game__field");
 const fieldRect = field.getBoundingClientRect();
 const gameBtn = document.querySelector(".game__button");
@@ -32,8 +35,9 @@ function startGame() {
 }
 
 function stopGame() {
-  //showPopUp();
   stopGameTimer();
+  hideGameButton();
+  showPopUpWithText("Retry❓");
 }
 
 function showTimerAndScore() {
@@ -55,6 +59,15 @@ function startGameTimer() {
 
 function stopGameTimer() {
   clearInterval(timer);
+}
+
+function showPopUpWithText(text) {
+  popUpText.innerText = text;
+  popUp.classList.remove("pop-up--hide");
+}
+
+function hideGameButton() {
+  gameBtn.style.visibility = "hidden";
 }
 
 function updateTimerText(time) {
