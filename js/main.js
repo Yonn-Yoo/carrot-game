@@ -31,6 +31,11 @@ function startGame() {
   startGameTimer();
 }
 
+function stopGame() {
+  //showPopUp();
+  stopGameTimer();
+}
+
 function showTimerAndScore() {
   gameTimer.style.visibility = "visible";
   gameScore.style.visibility = "visible";
@@ -48,13 +53,15 @@ function startGameTimer() {
   }, 1000);
 }
 
+function stopGameTimer() {
+  clearInterval(timer);
+}
+
 function updateTimerText(time) {
   const minutes = Math.floor(time / 60);
   const seconds = time % 60;
   gameTimer.innerText = `${minutes}:${seconds}`;
 }
-
-function stopGame() {}
 
 function showStopBtn() {
   const icon = gameBtn.querySelector(".fa-play");

@@ -49,10 +49,6 @@ body {
   visibility: hidden;
 }
 
-embed {
-  /* visibility: hidden; */
-}
-
 .game__score {
   visibility: hidden;
   width: 50px;
