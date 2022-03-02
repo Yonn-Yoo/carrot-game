@@ -18,6 +18,8 @@ let started = false;
 let score = 0;
 let timer = undefined;
 
+field.addEventListener("click", onFieldClick);
+
 gameBtn.addEventListener("click", () => {
   if (started) {
     stopGame();
@@ -26,6 +28,35 @@ gameBtn.addEventListener("click", () => {
   }
   started = !started;
 });
+
+function onFieldClick(event) {
+  if (!started) {
+    return;
+  }
+  const target = event.target;
+  if (target.matches(".carrot")) {
+    target.remove();
+    score++;
+    updateScoreBoard();
+    if (score === carrot_count) {
+      finishGame(true);
+    }
+  } else if (target.matches(".bug")) {
+    target.remove();
+    stopGameTimer();
+    finishGame(false);
+  }
+}
+
+function finishGame(win) {
+  started = false;
+  hideGameButton();
+  showPopUpWithText(win ? "You Won!!🏆" : "You Lost 💩");
+}
+
+function updateScoreBoard() {
+  gameScore.innerText = carrot_count - score;
+}
 
 function startGame() {
   initGame();
@@ -51,6 +82,7 @@ function startGameTimer() {
   timer = setInterval(() => {
     if (remainingTimeSec <= 0) {
       clearInterval(timer);
+      finishGame(false);
       return;
     }
     updateTimerText(--remainingTimeSec);
