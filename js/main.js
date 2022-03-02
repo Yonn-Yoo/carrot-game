@@ -53,6 +53,7 @@ popUpRefresh.addEventListener("click", () => {
   icon.classList.remove("fa-stop");
   icon.classList.add("fa-play");
   hidePopUp();
+  gameTimer.innerText = `0:${game_duration_sec}`;
   gameBtn.style.visibility = "visible";
 });
 
