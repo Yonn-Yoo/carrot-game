@@ -2,7 +2,7 @@
 
 const carrot_size = 80;
 const carrot_count = 6;
-const bug_count = 6;
+const bug_count = 10;
 const game_duration_sec = 10;
 
 const popUp = document.querySelector(".pop-up");
@@ -48,8 +48,12 @@ function onFieldClick(event) {
 }
 
 popUpRefresh.addEventListener("click", () => {
-  startGame();
-  popUp.classList.add("pop-up--hide");
+  started = false;
+  const icon = gameBtn.querySelector(".fa-solid");
+  icon.classList.remove("fa-stop");
+  icon.classList.add("fa-play");
+  hidePopUp();
+  gameBtn.style.visibility = "visible";
 });
 
 function finishGame(win) {
@@ -105,6 +109,10 @@ function showPopUpWithText(text) {
   popUp.classList.remove("pop-up--hide");
 }
 
+function hidePopUp() {
+  popUp.classList.add("pop-up--hide");
+}
+
 function hideGameButton() {
   gameBtn.style.visibility = "hidden";
 }
@@ -116,7 +124,7 @@ function updateTimerText(time) {
 }
 
 function showStopBtn() {
-  const icon = gameBtn.querySelector(".fa-play");
+  const icon = gameBtn.querySelector(".fa-solid");
   icon.classList.add("fa-stop");
   icon.classList.remove("fa-play");
 }
