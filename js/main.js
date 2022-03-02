@@ -26,7 +26,6 @@ gameBtn.addEventListener("click", () => {
   } else {
     startGame();
   }
-  started = !started;
 });
 
 function onFieldClick(event) {
@@ -48,9 +47,15 @@ function onFieldClick(event) {
   }
 }
 
+popUpRefresh.addEventListener("click", () => {
+  startGame();
+  popUp.classList.add("pop-up--hide");
+});
+
 function finishGame(win) {
   started = false;
   hideGameButton();
+  stopGameTimer();
   showPopUpWithText(win ? "You Won!!🏆" : "You Lost 💩");
 }
 
@@ -59,6 +64,7 @@ function updateScoreBoard() {
 }
 
 function startGame() {
+  started = true;
   initGame();
   showStopBtn();
   showTimerAndScore();
@@ -66,6 +72,7 @@ function startGame() {
 }
 
 function stopGame() {
+  started = false;
   stopGameTimer();
   hideGameButton();
   showPopUpWithText("Retry❓");
@@ -82,7 +89,7 @@ function startGameTimer() {
   timer = setInterval(() => {
     if (remainingTimeSec <= 0) {
       clearInterval(timer);
-      finishGame(false);
+      finishGame(carrot_count === 0);
       return;
     }
     updateTimerText(--remainingTimeSec);
