@@ -2,7 +2,7 @@
 
 const carrot_size = 80;
 const carrot_count = 6;
-const bug_count = 10;
+const bug_count = 15;
 const game_duration_sec = 10;
 
 const popUp = document.querySelector(".pop-up");
@@ -55,6 +55,7 @@ popUpRefresh.addEventListener("click", () => {
   hidePopUp();
   gameTimer.innerText = `0:${game_duration_sec}`;
   gameBtn.style.visibility = "visible";
+  updateScoreBoard();
 });
 
 function finishGame(win) {
@@ -136,6 +137,7 @@ function initGame() {
   // 벌레와 당근을 생성한 뒤 필드에 추가해줌
   addItem("carrot", carrot_count, "/img/carrot.png");
   addItem("bug", bug_count, "/img/bug.png");
+  score = 0;
 }
 
 function addItem(className, count, imgPath) {
