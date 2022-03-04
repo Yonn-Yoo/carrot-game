@@ -1,8 +1,8 @@
 "use strict";
 
 const carrot_size = 80;
-const carrot_count = 6;
-const bug_count = 15;
+const carrot_count = 10;
+const bug_count = 10;
 const game_duration_sec = 10;
 
 const popUp = document.querySelector(".pop-up");
@@ -14,6 +14,12 @@ const gameBtn = document.querySelector(".game__button");
 const gameTimer = document.querySelector(".game__timer");
 const gameScore = document.querySelector(".game__score");
 
+const carrotSound = new Audio("/sound/carrot_pull.mp3");
+const bugSound = new Audio("/sound/bug_pull.mp3");
+const winSound = new Audio("/sound/game_win.mp3");
+const alertSound = new Audio("/sound/alert.wav");
+const bgm = new Audio("/sound/bg.mp3");
+
 let started = false;
 let score = 0;
 let timer = undefined;
@@ -23,6 +29,7 @@ field.addEventListener("click", onFieldClick);
 gameBtn.addEventListener("click", () => {
   if (started) {
     stopGame();
+    playSound(alertSound);
   } else {
     startGame();
   }
@@ -36,12 +43,14 @@ function onFieldClick(event) {
   if (target.matches(".carrot")) {
     target.remove();
     score++;
+    playSound(carrotSound);
     updateScoreBoard();
     if (score === carrot_count) {
       finishGame(true);
     }
   } else if (target.matches(".bug")) {
     target.remove();
+    playSound(bugSound);
     stopGameTimer();
     finishGame(false);
   }
@@ -60,9 +69,25 @@ popUpRefresh.addEventListener("click", () => {
 
 function finishGame(win) {
   started = false;
+  if (win) {
+    playSound(winSound);
+  } else {
+    playSound(bugSound);
+  }
+  pauseSound(bgm);
   hideGameButton();
   stopGameTimer();
+  stopGame();
   showPopUpWithText(win ? "You Won!!🏆" : "You Lost 💩");
+}
+
+function playSound(sound) {
+  sound.currentTime = 0;
+  sound.play();
+}
+
+function pauseSound(sound) {
+  sound.pause();
 }
 
 function updateScoreBoard() {
@@ -71,6 +96,7 @@ function updateScoreBoard() {
 
 function startGame() {
   started = true;
+  playSound(bgm);
   initGame();
   showStopBtn();
   showTimerAndScore();
@@ -81,6 +107,7 @@ function stopGame() {
   started = false;
   stopGameTimer();
   hideGameButton();
+  pauseSound(bgm);
   showPopUpWithText("Retry❓");
 }
 
