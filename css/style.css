@@ -132,6 +132,21 @@ body {
     background: url("../img/background.png") center/cover;
     border-radius: 20px;
   }
+  .game__field {
+    margin-top: 1px;
+  }
+  .game__header {
+    padding: 5px;
+  }
+  .game__button {
+    width: 44px;
+    height: 44px;
+    background-color: wheat;
+    border: 3px solid black;
+    font-size: 20px;
+    transition: transform 0.1s ease-in;
+    border-radius: 10px;
+  }
 }
 
 #no-portrait {
@@ -151,20 +166,5 @@ body {
 @media screen and (min-width: 600px) {
   #no-portrait {
     display: none;
-  }
-  .game__field {
-    margin-top: 1px;
-  }
-  .game__header {
-    padding: 5px;
-  }
-  .game__button {
-    width: 44px;
-    height: 44px;
-    background-color: wheat;
-    border: 3px solid black;
-    font-size: 20px;
-    transition: transform 0.1s ease-in;
-    border-radius: 10px;
   }
 }
