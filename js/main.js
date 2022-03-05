@@ -14,11 +14,11 @@ const gameBtn = document.querySelector(".game__button");
 const gameTimer = document.querySelector(".game__timer");
 const gameScore = document.querySelector(".game__score");
 
-const carrotSound = new Audio("/sound/carrot_pull.mp3");
-const bugSound = new Audio("/sound/bug_pull.mp3");
-const winSound = new Audio("/sound/game_win.mp3");
-const alertSound = new Audio("/sound/alert.wav");
-const bgm = new Audio("/sound/bg.mp3");
+const carrotSound = new Audio("./sound/carrot_pull.mp3");
+const bugSound = new Audio("./sound/bug_pull.mp3");
+const winSound = new Audio("./sound/game_win.mp3");
+const alertSound = new Audio("./sound/alert.wav");
+const bgm = new Audio("./sound/bg.mp3");
 
 let started = false;
 let score = 0;
@@ -162,8 +162,8 @@ function initGame() {
   field.innerHTML = "";
   gameScore.innerText = carrot_count;
   // 벌레와 당근을 생성한 뒤 필드에 추가해줌
-  addItem("carrot", carrot_count, "/img/carrot.png");
-  addItem("bug", bug_count, "/img/bug.png");
+  addItem("carrot", carrot_count, "./img/carrot.png");
+  addItem("bug", bug_count, "./img/bug.png");
   score = 0;
 }
 
