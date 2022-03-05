@@ -2,7 +2,7 @@
 
 const carrot_size = 80;
 const carrot_count = 10;
-const bug_count = 8;
+const bug_count = 40;
 const game_duration_sec = 12;
 
 const popUp = document.querySelector(".pop-up");
