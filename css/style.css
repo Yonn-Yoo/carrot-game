@@ -127,8 +127,8 @@ body {
     margin: auto;
     display: flex;
     flex-direction: column;
-    width: 810px;
-    height: 360px;
+    width: 750px;
+    height: 320px;
     background: url("../img/background.png") center/cover;
     border-radius: 20px;
   }
