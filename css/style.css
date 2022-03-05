@@ -127,9 +127,9 @@ body {
     margin: auto;
     display: flex;
     flex-direction: column;
-    width: 840px;
-    height: 380px;
-    background: url("/img/background.png") center/cover;
+    width: 810px;
+    height: 360px;
+    background: url("../img/background.png") center/cover;
     border-radius: 20px;
   }
 }
@@ -148,7 +148,7 @@ body {
   color: black;
 }
 
-@media screen and (min-width: 400px) {
+@media screen and (min-width: 600px) {
   #no-portrait {
     display: none;
   }
