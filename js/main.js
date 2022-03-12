@@ -1,13 +1,13 @@
 "use strict";
 
-const carrot_size = 80;
-const carrot_count = 12;
-const bug_count = 17;
-const game_duration_sec = 10;
+const CARROT_SIZE = 80;
+const CARROT_COUNT = 12;
+const BUG_COUNT = 17;
+const GAME_DURATION_SEC = 10;
 
 const popUp = document.querySelector(".pop-up");
 const popUpText = document.querySelector(".pop-up__message");
-const popUpRefresh = document.querySelector(".pop-up__refresh");
+const popUpRefreshBtn = document.querySelector(".pop-up__refresh");
 const field = document.querySelector(".game__field");
 const fieldRect = field.getBoundingClientRect();
 const gameBtn = document.querySelector(".game__button");
@@ -20,14 +20,14 @@ const winSound = new Audio("./sound/game_win.mp3");
 const alertSound = new Audio("./sound/alert.wav");
 const bgm = new Audio("./sound/bg.mp3");
 
-let started = false;
+let isStarted = false;
 let score = 0;
-let timer = undefined;
+let timer = null;
 
 field.addEventListener("click", onFieldClick);
 
 gameBtn.addEventListener("click", () => {
-  if (started) {
+  if (isStarted) {
     stopGame();
     playSound(alertSound);
   } else {
@@ -36,7 +36,7 @@ gameBtn.addEventListener("click", () => {
 });
 
 function onFieldClick(event) {
-  if (!started) {
+  if (!isStarted) {
     return;
   }
   const target = event.target;
@@ -45,7 +45,7 @@ function onFieldClick(event) {
     score++;
     playSound(carrotSound);
     updateScoreBoard();
-    if (score === carrot_count) {
+    if (score === CARROT_COUNT) {
       finishGame(true);
     }
   } else if (target.matches(".bug")) {
@@ -56,30 +56,19 @@ function onFieldClick(event) {
   }
 }
 
-popUpRefresh.addEventListener("click", () => {
-  started = false;
+function updateScoreBoard() {
+  gameScore.innerText = CARROT_COUNT - score;
+}
+
+popUpRefreshBtn.addEventListener("click", () => {
+  isStarted = false;
   const icon = gameBtn.querySelector(".fa-solid");
   icon.classList.remove("fa-stop");
   icon.classList.add("fa-play");
   hidePopUp();
-  gameTimer.innerText = `0:${game_duration_sec}`;
+  updateTimerText(GAME_DURATION_SEC);
   gameBtn.style.visibility = "visible";
-  updateScoreBoard();
 });
-
-function finishGame(win) {
-  started = false;
-  if (win) {
-    playSound(winSound);
-  } else {
-    playSound(bugSound);
-  }
-  pauseSound(bgm);
-  hideGameButton();
-  stopGameTimer();
-  stopGame();
-  showPopUpWithText(win ? "You Won!!🏆" : "You Lost 💩");
-}
 
 function playSound(sound) {
   sound.currentTime = 0;
@@ -90,12 +79,8 @@ function pauseSound(sound) {
   sound.pause();
 }
 
-function updateScoreBoard() {
-  gameScore.innerText = carrot_count - score;
-}
-
 function startGame() {
-  started = true;
+  isStarted = true;
   playSound(bgm);
   initGame();
   showStopBtn();
@@ -104,7 +89,7 @@ function startGame() {
 }
 
 function stopGame() {
-  started = false;
+  isStarted = false;
   stopGameTimer();
   hideGameButton();
   pauseSound(bgm);
@@ -117,16 +102,30 @@ function showTimerAndScore() {
 }
 
 function startGameTimer() {
-  let remainingTimeSec = game_duration_sec;
+  let remainingTimeSec = GAME_DURATION_SEC;
   updateTimerText(remainingTimeSec);
   timer = setInterval(() => {
     if (remainingTimeSec <= 0) {
       clearInterval(timer);
-      finishGame(carrot_count === 0);
+      finishGame(false);
       return;
     }
     updateTimerText(--remainingTimeSec);
   }, 1000);
+}
+
+function finishGame(isWon) {
+  isStarted = false;
+  if (isWon) {
+    playSound(winSound);
+  } else {
+    playSound(bugSound);
+  }
+  pauseSound(bgm);
+  hideGameButton();
+  stopGameTimer();
+  stopGame();
+  showPopUpWithText(isWon ? "You Won!!🏆" : "You Lost 💩");
 }
 
 function stopGameTimer() {
@@ -160,18 +159,17 @@ function showStopBtn() {
 
 function initGame() {
   field.innerHTML = "";
-  gameScore.innerText = carrot_count;
-  // 벌레와 당근을 생성한 뒤 필드에 추가해줌
-  addItem("carrot", carrot_count, "./img/carrot.png");
-  addItem("bug", bug_count, "./img/bug.png");
+  gameScore.innerText = CARROT_COUNT;
+  addItem("carrot", CARROT_COUNT, "./img/carrot.png");
+  addItem("bug", BUG_COUNT, "./img/bug.png");
   score = 0;
 }
 
 function addItem(className, count, imgPath) {
   const x1 = 0;
   const y1 = 0;
-  const x2 = fieldRect.width - carrot_size;
-  const y2 = fieldRect.height - carrot_size;
+  const x2 = fieldRect.width - CARROT_SIZE;
+  const y2 = fieldRect.height - CARROT_SIZE;
   for (let i = 0; i < count; i++) {
     const item = document.createElement("img");
     item.setAttribute("class", className);
@@ -186,5 +184,5 @@ function addItem(className, count, imgPath) {
 }
 
 function randomNumber(min, max) {
-  return Math.random() * (max - min) + min;
+  return Math.random() * (max - min);
 }
