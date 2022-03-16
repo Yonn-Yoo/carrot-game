@@ -39,7 +39,9 @@ function onFieldClick(event) {
   if (!isStarted) {
     return;
   }
+
   const target = event.target;
+  // FIXME: use switch
   if (target.matches(".carrot")) {
     target.remove();
     score++;
@@ -62,12 +64,15 @@ function updateScoreBoard() {
 
 popUpRefreshBtn.addEventListener("click", () => {
   isStarted = false;
+
   const icon = gameBtn.querySelector(".fa-solid");
+
   icon.classList.remove("fa-stop");
   icon.classList.add("fa-play");
+  gameBtn.style.visibility = "visible";
+
   hidePopUp();
   updateTimerText(GAME_DURATION_SEC);
-  gameBtn.style.visibility = "visible";
 });
 
 function playSound(sound) {
@@ -103,7 +108,9 @@ function showTimerAndScore() {
 
 function startGameTimer() {
   let remainingTimeSec = GAME_DURATION_SEC;
+
   updateTimerText(remainingTimeSec);
+
   timer = setInterval(() => {
     if (remainingTimeSec <= 0) {
       clearInterval(timer);
@@ -116,11 +123,13 @@ function startGameTimer() {
 
 function finishGame(isWon) {
   isStarted = false;
+
   if (isWon) {
     playSound(winSound);
   } else {
     playSound(bugSound);
   }
+
   pauseSound(bgm);
   hideGameButton();
   stopGameTimer();
@@ -148,21 +157,23 @@ function hideGameButton() {
 function updateTimerText(time) {
   const minutes = Math.floor(time / 60);
   const seconds = time % 60;
+
   gameTimer.innerText = `${minutes}:${seconds}`;
 }
 
 function showStopBtn() {
   const icon = gameBtn.querySelector(".fa-solid");
+
   icon.classList.add("fa-stop");
   icon.classList.remove("fa-play");
 }
 
 function initGame() {
   field.innerHTML = "";
+  score = 0;
   gameScore.innerText = CARROT_COUNT;
   addItem("carrot", CARROT_COUNT, "./img/carrot.png");
   addItem("bug", BUG_COUNT, "./img/bug.png");
-  score = 0;
 }
 
 function addItem(className, count, imgPath) {
@@ -170,13 +181,17 @@ function addItem(className, count, imgPath) {
   const y1 = 0;
   const x2 = fieldRect.width - CARROT_SIZE;
   const y2 = fieldRect.height - CARROT_SIZE;
+  // FIXME:
   for (let i = 0; i < count; i++) {
     const item = document.createElement("img");
+
     item.setAttribute("class", className);
     item.setAttribute("src", imgPath);
     item.style.position = "absolute";
+
     const x = randomNumber(x1, x2);
     const y = randomNumber(y1, y2);
+
     item.style.left = `${x}px`;
     item.style.top = `${y}px`;
     field.appendChild(item);
