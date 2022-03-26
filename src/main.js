@@ -1,13 +1,11 @@
 "use strict";
+import PopUp from "./popup.js";
 
 const CARROT_SIZE = 80;
 const CARROT_COUNT = 12;
 const BUG_COUNT = 17;
 const GAME_DURATION_SEC = 10;
 
-const popUp = document.querySelector(".pop-up");
-const popUpText = document.querySelector(".pop-up__message");
-const popUpRefreshBtn = document.querySelector(".pop-up__refresh");
 const field = document.querySelector(".game__field");
 const fieldRect = field.getBoundingClientRect();
 const gameBtn = document.querySelector(".game__button");
@@ -23,6 +21,19 @@ const bgm = new Audio("./sound/bg.mp3");
 let isStarted = false;
 let score = 0;
 let timer = null;
+
+const gameFinishBanner = new PopUp();
+gameFinishBanner.setClickListener(() => {
+  isStarted = false;
+
+  const icon = gameBtn.querySelector(".fa-solid");
+
+  icon.classList.remove("fa-stop");
+  icon.classList.add("fa-play");
+  gameBtn.style.visibility = "visible";
+
+  updateTimerText(GAME_DURATION_SEC);
+});
 
 field.addEventListener("click", onFieldClick);
 
@@ -62,19 +73,6 @@ function updateScoreBoard() {
   gameScore.innerText = CARROT_COUNT - score;
 }
 
-popUpRefreshBtn.addEventListener("click", () => {
-  isStarted = false;
-
-  const icon = gameBtn.querySelector(".fa-solid");
-
-  icon.classList.remove("fa-stop");
-  icon.classList.add("fa-play");
-  gameBtn.style.visibility = "visible";
-
-  hidePopUp();
-  updateTimerText(GAME_DURATION_SEC);
-});
-
 function playSound(sound) {
   sound.currentTime = 0;
   sound.play();
@@ -98,7 +96,7 @@ function stopGame() {
   stopGameTimer();
   hideGameButton();
   pauseSound(bgm);
-  showPopUpWithText("Retry❓");
+  gameFinishBanner.showWithText("Retry❓");
 }
 
 function showTimerAndScore() {
@@ -134,20 +132,11 @@ function finishGame(isWon) {
   hideGameButton();
   stopGameTimer();
   stopGame();
-  showPopUpWithText(isWon ? "You Won!!🏆" : "You Lost 💩");
+  gameFinishBanner.showWithText(isWon ? "You Won!!🏆" : "You Lost 💩");
 }
 
 function stopGameTimer() {
   clearInterval(timer);
-}
-
-function showPopUpWithText(text) {
-  popUpText.innerText = text;
-  popUp.classList.remove("pop-up--hide");
-}
-
-function hidePopUp() {
-  popUp.classList.add("pop-up--hide");
 }
 
 function hideGameButton() {
