@@ -31,8 +31,6 @@ export default class Game {
 
   setGameStopListener(onGameStop) {
     this.onGameStop = onGameStop;
-    this.gameFinishBanner.showWithText("Retry❓");
-    gameFinishBanner.showWithText(isWon ? "You Won!!🏆" : "You Lost 💩");
   }
 
   start() {
@@ -65,7 +63,6 @@ export default class Game {
     sound.pauseBackground();
     this.hideGameButton();
     this.stopGameTimer();
-    this.stop();
     this.onGameStop && this.onGameStop(isWon ? "win" : "lose");
   }
 
