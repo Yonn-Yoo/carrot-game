@@ -3,7 +3,39 @@
 import * as sound from "./sound.js";
 import Field from "./field.js";
 
-export default class Game {
+export const Reason = Object.freeze({
+  win: "win",
+  lose: "lose",
+  cancel: "cancel",
+});
+
+// Builder pattern
+export class GameBuilder {
+  gameDuration(duration) {
+    this.gameDuration = duration;
+    return this;
+  }
+
+  carrotCount(num) {
+    this.carrotCount = num;
+    return this;
+  }
+
+  bugCount(num) {
+    this.bugCount = num;
+    return this;
+  }
+
+  build() {
+    return new Game(
+      this.gameDuration, //
+      this.carrotCount,
+      this.bugCount
+    );
+  }
+}
+
+class Game {
   constructor(gameDuration, carrotCount, bugCount) {
     this.gameDuration = gameDuration;
     this.carrotCount = carrotCount;
@@ -14,7 +46,7 @@ export default class Game {
     this.gameBtn = document.querySelector(".game__button");
     this.gameBtn.addEventListener("click", () => {
       if (this.isStarted) {
-        this.stop();
+        this.stop(Reason.cancel);
         sound.playAlert();
       } else {
         this.start();
@@ -42,28 +74,13 @@ export default class Game {
     this.startGameTimer();
   }
 
-  stop() {
+  stop(reason) {
     this.isStarted = false;
     this.stopGameTimer();
     this.hideGameButton();
     sound.pauseBackground();
-    sound.playAlert();
-    this.onGameStop && this.onGameStop("cancel");
-  }
 
-  finishGame(isWon) {
-    this.isStarted = false;
-
-    if (isWon) {
-      sound.playWin();
-    } else {
-      sound.playBug();
-    }
-
-    sound.pauseBackground();
-    this.hideGameButton();
-    this.stopGameTimer();
-    this.onGameStop && this.onGameStop(isWon ? "win" : "lose");
+    this.onGameStop && this.onGameStop(reason);
   }
 
   onItemClick = (item) => {
@@ -75,10 +92,10 @@ export default class Game {
       this.score++;
       this.updateScoreBoard();
       if (this.score === this.carrotCount) {
-        this.finishGame(true);
+        this.stop(Reason.win);
       }
     } else if (item === "bug") {
-      this.finishGame(false);
+      this.stop(Reason.lose);
     }
   };
 
@@ -99,7 +116,7 @@ export default class Game {
     this.timer = setInterval(() => {
       if (remainingTimeSec <= 0) {
         clearInterval(this.timer);
-        this.finishGame(false);
+        this.stop(this.carrotCount === this.score ? Reason.win : Reason.lose);
         return;
       }
       this.updateTimerText(--remainingTimeSec);
