@@ -8,8 +8,8 @@ const gameFinishBanner = new PopUp();
 
 const game = new GameBuilder()
   .gameDuration(10)
-  .carrotCount(1)
-  .bugCount(20)
+  .carrotCount(10)
+  .bugCount(12)
   .build();
 game.setGameStopListener((reason) => {
   let message;
